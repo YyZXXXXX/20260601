@@ -1194,18 +1194,19 @@ const footerQuote = computed(() => {
 
 /* 漢堡選單樣式 */
 .menu-container {
-  position: absolute;
-  top: 60px; /* 貼合內距 */
-  right: 40px;
+  position: fixed;
+  top: 30px; 
+  /* 讓選單在大螢幕能貼齊中央內容區，小螢幕則保持邊距，不干擾主要閱讀動線 */
+  right: max(20px, calc(50vw - 410px));
   z-index: 100;
 }
 .hamburger-btn {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   color: #0f172a;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 30px;
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  padding: 12px 24px;
+  border-radius: 40px;
   font-weight: 800;
   font-size: 1em;
   cursor: pointer;
@@ -1224,12 +1225,16 @@ const footerQuote = computed(() => {
 .dropdown-menu {
   position: absolute;
   top: 100%; right: 0;
-  margin-top: 10px;
+  margin-top: 15px;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  border: 1px solid rgba(226, 232, 240, 0.8);
   display: flex; flex-direction: column;
-  min-width: 220px; padding: 8px;
+  min-width: 240px; padding: 10px;
+  /* 限制最大高度，避免在小螢幕手機展開時超出螢幕範圍而發生重疊切斷 */
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
 }
 .dropdown-menu button {
   background: transparent; border: none; padding: 14px 18px;
