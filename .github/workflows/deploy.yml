@@ -1,0 +1,46 @@
+name: Deploy to GitHub Pages
+
+on:
+  # 當推送到 main 或 master 分支時觸發自動部署
+  push:
+    branches: [ main, master ]
+  # 允許你從 GitHub Actions 頁面手動執行此工作流程
+  workflow_dispatch:
+
+# 設定 GITHUB_TOKEN 的權限，允許部署到 GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 確保同一時間只有一個部署工作在執行
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install # 如果你是用 pnpm，請改成 pnpm install (需搭配額外設定) 或 yarn install
+      - name: Build
+        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist' # Vite 預設打包出來的資料夾是 dist
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
