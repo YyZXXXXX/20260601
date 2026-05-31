@@ -825,9 +825,12 @@ const footerQuote = computed(() => {
       </div>
     </div>
 
+    <!-- 透明遮罩：當選單展開時，點擊選單外部區域即可自動收合 -->
+    <div v-if="isMenuOpen" class="menu-overlay" @click="isMenuOpen = false"></div>
+
     <!-- 頂部漢堡選單 (Hamburger Menu) -->
-    <div class="menu-container" @mouseenter="isMenuOpen = true" @mouseleave="isMenuOpen = false">
-      <button class="hamburger-btn">☰ 探索指南</button>
+    <div class="menu-container">
+      <button class="hamburger-btn" @click="isMenuOpen = !isMenuOpen">☰ 探索指南</button>
       <Transition name="dropdown">
         <div v-if="isMenuOpen" class="dropdown-menu">
           <button :class="{ active: currentTab === 'itinerary' }" @click="currentTab = 'itinerary'; isMenuOpen = false">🗺️ 行程避坑心法</button>
@@ -1210,6 +1213,13 @@ const footerQuote = computed(() => {
   transition: all 0.3s;
 }
 .hamburger-btn:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
+
+/* 選單透明背景遮罩，用於點擊外部關閉選單 */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90; /* 確保在 menu-container (z-index: 100) 下方 */
+}
 
 .dropdown-menu {
   position: absolute;
